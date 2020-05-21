@@ -8,7 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 desconectar.execute();
             }
         });
+
     }
 
     class conexion extends AsyncTask<String, Void, Void> {
@@ -51,7 +55,16 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             String resultado;
             try {
+
                 Socket socket = new Socket(strings[0], PORT);
+                socket.isConnected();
+                PrintStream output = new PrintStream(socket.getOutputStream());
+                output.println("Mr. Wonderful");
+
+                BufferedReader input = new BufferedReader( new InputStreamReader(socket.getInputStream()));
+                resultado = input.readLine();
+                socket.close();
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -59,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void mensaje) {
+            super.onPostExecute(mensaje);
         }
     }
 
