@@ -2,23 +2,30 @@ package com.example.socketconnection;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText IPUsuario;
-    private Button CONECTAR, DESCONECTAR;
+    private EditText IPUsuario, editText;
+    private Button CONECTAR, button, DESCONECTAR;
     private static final int PORT = 5000;
+    private Context context = this;
+
+    /**
+     * HOST
+     * */
+    private static final String ADDRESS = "52.87.207.123";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +33,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         IPUsuario = findViewById(R.id.IPUsuario);
+        editText = findViewById(R.id.editText);
         CONECTAR = findViewById(R.id.conexionaconectar);
+        button = findViewById(R.id.button);
         DESCONECTAR =findViewById(R.id.conexiondesconectar);
 
         CONECTAR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conexion conectar = new conexion();
-                conectar.execute();
-
+                if (IPUsuario.getText().length() > 0) {
+                    conexion conectar = new conexion();
+                    conectar.execute(IPUsuario.getText().toString());
+                } else {
+                    conexion conectar = new conexion();
+                    conectar.execute(ADDRESS);
+                }
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (editText.getText().length() > 0) {
+                    conexion conectar = new conexion();
+                    conectar.execute(editText.getText().toString());
+                } else {
+                    Toast.makeText(context, "Escriba \"Mr. Worderful\" o \"libro\" ", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         DESCONECTAR.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,17 +73,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class conexion extends AsyncTask<String, Void, Void> {
+    class conexion extends AsyncTask<String, Void, String> {
 
         @Override
-        protected Void doInBackground(String... strings) {
-            String resultado;
+        protected String doInBackground(String... strings) {
+            String resultado = "";
             try {
 
-                Socket socket = new Socket(strings[0], PORT);
-                socket.isConnected();
-                PrintStream output = new PrintStream(socket.getOutputStream());
-                output.println("Mr. Wonderful");
+                Socket socket = new Socket(ADDRESS, PORT);
+                //socket.isConnected();
+                //PrintStream output = new PrintStream(socket.getOutputStream());
+                //output.println("Mr. Wonderful");
 
                 BufferedReader input = new BufferedReader( new InputStreamReader(socket.getInputStream()));
                 resultado = input.readLine();
@@ -71,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return null;
+            return resultado;
         }
 
         @Override
-        protected void onPostExecute(Void mensaje) {
+        protected void onPostExecute(String mensaje) {
             super.onPostExecute(mensaje);
         }
     }
