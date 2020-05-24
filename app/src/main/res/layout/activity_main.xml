@@ -61,6 +61,18 @@
                 android:layout_height="wrap_content"
                 android:text="Enviar petición"
                 android:id="@+id/button" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Respuesta del servidor" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/editText2" />
         </LinearLayout>
 
         <Button

@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
-    private EditText IPUsuario, editText;
+    private EditText IPUsuario, editText, editText2;
     private Button CONECTAR, button, DESCONECTAR;
     private static final int PORT = 5000;
     private Context context = this;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         IPUsuario = findViewById(R.id.IPUsuario);
         editText = findViewById(R.id.editText);
+        editText2 = findViewById(R.id.editText2);
         CONECTAR = findViewById(R.id.conexionaconectar);
         button = findViewById(R.id.button);
         DESCONECTAR =findViewById(R.id.conexiondesconectar);
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String mensaje) {
-            super.onPostExecute(mensaje);
+            //super.onPostExecute(mensaje);
+            editText2.setText(mensaje);
         }
     }
 
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             return null;
         }
+
     }
 
     /*@Override
